@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>支付成功</title>
+    <script>
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+                    if (clientWidth >= 750) {
+                        docEl.style.fontSize = '100px';
+                    } else {
+                        docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+                    }
+                };
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <style media="screen">
+        html,
+        body {
+            background: #fff;
+            font-family: PingFang SC;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #vue-app {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+        }
+
+        img {
+            display: block;
+            margin: 0;
+        }
+
+        .box img {
+            width: 100px;
+            height: 100px;
+        }
+
+        .box p {
+            font-size: 0.35rem;
+            width: 100%;
+            text-align: center;
+        }
+
+        a {
+            font-size: 0.35rem;
+            display: block;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" v-cloak>
+        <div class="box">
+            <img src="http://app.nxylzc.com/h5/success.png" alt="">
+            <p>支付成功</p>
+            <!-- <a v-if="os=='andriod'" href="tradhall://?paraml=pay">返回应用</a> -->
+            <a v-if="os=='andriod'" href="#" @click='back'>返回应用</a>
+            <a v-if="os=='ios'" href="http://47.114.162.15/dist/#/my">返回应用</a>
+            <a href="sinaweibo://splash">微博app</a>
+            <a href="youshengyouse://index">有声有色</a>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.min.js"></script>
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            os: '',
+            type: ''
+        },
+        created() {
+            this.os = this.appSource() //ios andriod
+            this.type = this.getQueryVariable('type')
+        },
+        methods: {
+            appSource() {
+                const u = navigator.userAgent;
+                const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+                if (isiOS) {
+                    return "ios";
+                } else {
+                    return "andriod";
+                }
+            },
+            getQueryVariable(variable) {
+                var query = window.location.search.substring(1);
+                var vars = query.split("&");
+                for (var i = 0; i < vars.length; i++) {
+                    var pair = vars[i].split("=");
+                    if (pair[0] == variable) { return pair[1]; }
+                }
+                return (false);
+            },
+            back() {
+                history.go(-3);
+            }
+        }
+    })
+</script>
+
+</html>
