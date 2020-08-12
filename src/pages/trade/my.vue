@@ -19,7 +19,7 @@
         
         <div>
           <p>GST余额</p>
-          <span>{{userInfo.credit2}}</span>
+          <span>{{userInfo.credit3}}</span>
         </div>
         <div  @click="jumpTo('USDTList')">
           <p>TG余额</p>

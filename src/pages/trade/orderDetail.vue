@@ -11,6 +11,10 @@
           <p style="font-weight:700;color:#333;">支付宝账户：{{config.alipay}}</p>
          <i class="clip" @click="copyTextShare(config.alipay)"></i>
         </div>
+        <div class="copytitle">
+          <p style="font-weight:700;color:#333;">姓名：{{config.realname}}</p>
+         <i class="clip" @click="copyTextShare(config.realname)"></i>
+        </div>
       </div>
      
       <div class="accountBox" style="margin-top:0.3rem">

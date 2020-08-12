@@ -44,6 +44,19 @@
         />
       </div>
     </van-popup>
+     <van-popup  class="pup_login" v-model="showb" :style="{ height: '30%',width:'70%' }"    >
+          <div class="tips" >短信验证码确认</div>
+           <div class="phone">
+                <input  type="number"  disabled v-model.trim="formData.mobile"  />
+                <span class="img"></span>
+			    </div>
+            <div class="password">
+                  <input type="text"  v-model.trim="sms_code"  placeholder="请输入验证码"/>
+                  <span class="img passimg"></span>
+                  <span class="sm_code" :class="[load ? '' : 'txt_hui']" @click="getCode">{{codeContent}}</span>
+		    	</div>
+          <van-button class="btn_sure"  @click="sure">确认</van-button>
+      </van-popup>
   </div>
 </template>
 <script>
@@ -56,7 +69,15 @@ export default {
       config: [],
       pwd: "",
       showKeyboard: false,
-      show: false
+      show: false,
+      showb:false,
+      codeContent:'发送验证码',
+      formData:{
+        type:'lock_tg_trade',
+        mobile:'',
+      },
+      sms_code:'',
+      	load:true,
     };
   },
   created() {
@@ -73,6 +94,39 @@ export default {
     });
   },
   methods: {
+    countDown(num){
+				if(num>0){
+					this.codeContent = '重新获取' + num + 's'
+					setTimeout(()=>{
+						this.countDown(num-1)
+					},1000)
+				}else{
+					this.codeContent='发送验证码'
+					this.load = true
+				}
+      },
+      getCode(){
+				if(this.load){
+			
+					if(!/(^1[[0-9]{10}$)/.test(this.formData.mobile))
+				   	return	  this.$vux.toast.text("请输入正确的手机号码");
+					
+          this.load = false;
+          this.$http.post("/amoy/auth/sms-verifycode",this.formData,true).then(res=>{
+              if(res.code==0){
+              this.$vux.toast.text("发送成功");
+						
+							this.countDown(60)
+						}else{
+							this.load = true;
+							
+						}	
+          }).catch(() => {
+						this.load = true;
+					})
+				
+				}
+			},
     getConfig() {
       let url = "";
       if (this.$route.query.type ==1) {
@@ -92,12 +146,21 @@ export default {
         .then(res => {
           if (res.code == 0) {
             this.config = res.data;
+            this.formData.mobile=res.data.my_mobile
           }
         });
     },
     submit() {
+      this.showb=true
+
+
+    },
+    sure(){
+      this.showb=false
+      
       this.show = true;
       this.showKeyboard = true;
+      
     },
     onInput(key) {
       this.pwd = (this.pwd + key).slice(0, 6);
@@ -115,13 +178,15 @@ export default {
             url,
             {
               order_id: this.$route.query.id,
-              pay_password: this.pwd
+              pay_password: this.pwd,
+              sms_code:this.sms_code
             },
             true,
             true
           )
           .then(res => {
             if (res.code == 0) {
+              this.sms_code=''
               this.$vux.toast.text("提交成功！");
               if (this.$route.query.type > 3) {
                 this.$router.push("/newPayProof?id=" + this.$route.query.id);
@@ -257,6 +322,60 @@ export default {
         border-width: 0;
       }
     }
+  }
+}
+</style>
+<style lang="less" scoped>
+
+.pup_login{
+  border-radius: 0.2rem;
+  padding:0.33rem;
+  input{
+      padding-left: 0.1rem;
+      height: 0.6rem;
+        border:1px solid #ddd;
+       
+    }
+  .phone{
+     margin-top: 0.4rem;
+     input{
+       width: 5rem;
+       margin-bottom: 0.4rem;
+        border-radius: 0.1rem 0 0 0.1rem;
+     }
+    
+  }
+  .password{
+    display: flex;
+    flex-wrap: nowrap;
+
+    input{
+      width: 3.4rem;
+    }
+    .sm_code{
+      color:#fff;
+      height: 0.63rem;
+      display: inline-block;
+      line-height: 0.63rem;
+      // margin-top: -0.12rem;
+      width: 1.55rem;
+      text-align: center;
+      border-radius: 0 0.1rem  0.1rem 0;
+      background: linear-gradient(#e3b97d, #f0d6a0);
+    }
+  }
+  .btn_sure{
+    width: 5rem;
+    color: #fff;
+     background: #e5b875;
+     text-align: center;
+      height: 0.8rem;
+      line-height: 0.8rem;
+      margin-top: 0.6rem;
+  }
+  .tips{
+    text-align: center;
+    font-size: 0.28rem;
   }
 }
 </style>

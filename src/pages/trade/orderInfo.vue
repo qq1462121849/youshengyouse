@@ -97,9 +97,11 @@
         />
       </div>
     </van-popup>
+   
   </div>
 </template>
 <script>
+import { Dialog } from 'vant';
 export default {
   data() {
     return {
@@ -115,7 +117,8 @@ export default {
       pwd: "",
       showKeyboard: false,
       show: false,
-      type:this.$route.query.type
+      type:this.$route.query.type,
+      
     };
   },
   created() {
@@ -167,23 +170,37 @@ export default {
       };
     },
     confirm() {
-      this.showKeyboard = true;
-      this.show = true;
+       Dialog.confirm({
+         title: '温馨提示',
+           message: '您确认进行收款吗?',
+          }).then(() => {
+        
+            this.showKeyboard = true;
+            this.show = true;    
+        }).catch(() => {
+        // on cancel
+         this.show=false
+         this.showKeyboard = false;
+      });
+    
     },
     shensu(){
-              
-        this.$http.post(
-          "/amoy/trade/trade-complain",
-          {
-            order_id: this.$route.query.id
-          },
-          true,
-          true
-        ).then(res=>{
-          if(res.code==0){
-            this.$vux.toast.text(res.msg);
-          }
+        Dialog.confirm({
+         title: '温馨提示',
+           message: '您确认进行申诉吗?',
+          }).then(() => {
+                this.$http.post("/amoy/trade/trade-complain",{ order_id: this.$route.query.id},true,true ).then(res=>{
+              if(res.code==0){
+                this.$vux.toast.text(res.msg);
+              }
         })
+        })
+      .catch(() => {
+        // on cancel
+     
+      });
+              
+      
     },
     onInput(key) {
       this.pwd = (this.pwd + key).slice(0, 6);

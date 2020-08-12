@@ -28,7 +28,7 @@
           <span class="clipTxt" @click="copyTextShare(config.alipay)">复制</span>
         </div>
         <div class="title">姓名：{{config.withdraw_to_name}}</div>
-        <img @click="showBig=true" class="zfb" :src="config.qrcode" alt="aliPay" />
+        <!-- <img @click="showBig=true" class="zfb" :src="config.qrcode" alt="aliPay" /> -->
       </div>
       <div class="accountBox" style="margin-top:0.3rem">
         <p>
@@ -83,10 +83,10 @@
         </div>
         
       </div>
-      <div class="bottom">
-            
-           <div class="btn"  @click="submit">提交支付凭证</div>
-           <div class="btn"  @click="shensu">提交申诉</div>
+      <div class="botomBox">
+            <div class="btn"  @click="shensu" style="background:rgba(153, 153, 153, 1)">提交申诉</div>
+           <div class="btn"  @click="submit" >提交支付凭证</div>
+           
 
       </div>
      
@@ -263,6 +263,23 @@ export default {
 #proof {
   min-height: 100%;
   padding-bottom: 1.2rem;
+  .botomBox {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+  > div {
+    width: 2.3rem;
+    height: 0.7rem;
+   color: #fff;
+    border: 1px solid rgba(153, 153, 153, 1);
+    font-size: 0.28rem;
+   
+    line-height: 0.7rem;
+    text-align: center;
+    float: right;
+    
+  }
+}
 }
 .headerBox {
   width: 100%;

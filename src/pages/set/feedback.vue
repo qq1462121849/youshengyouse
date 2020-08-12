@@ -73,8 +73,9 @@ export default {
 </script>
 <style lang="less" scoped>
 #feedback {
-  height: 100%;
+  min-height: 100%;
   overflow: hidden;
+  padding-bottom: 40px;
   .box{
    
     width: 90%;
