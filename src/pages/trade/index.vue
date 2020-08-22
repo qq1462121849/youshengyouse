@@ -30,12 +30,12 @@
               </div>
              
             </div>
-            <div class="searchBox">
-              <div class="topBox">
-                <i class="searchIcon"></i>
+            <div class="searchBox" style="height:1rem;">
+               <div class="topBox" style="height:0;margin-top:0;margin-bottom:0;">
+                <!-- <i class="searchIcon"></i>
                 <input type="text" placeholder="输入您想要搜索的手机号" v-model="searchTxt" />
-                <span @click="search">搜索</span>
-              </div>
+                <span @click="search">搜索</span> -->
+              </div> 
               <div class="sortBox">
                 <div class="sort" @click="rank(1)">
                   <span :class="classifySort==1||classifySort==4?'activeSpan':''">时间</span>
